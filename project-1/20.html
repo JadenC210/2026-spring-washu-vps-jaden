@@ -1,5 +1,5 @@
 <head>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
         <title> Turmeric </title>
         
         <link rel="icon" type="image/png" href="favicon.png">
@@ -13,6 +13,7 @@
       letter-spacing: 1px;
       background-color: #fff8ef;
       background-image: url('https://www.transparenttextures.com/patterns/cream-pixels.png');
+      margin: 50px 0;
     }
 
    .menu-container {
@@ -171,22 +172,24 @@
 
     .var-flex-cards {
       display: flex;
-      flex-direction: row;
+     flex-wrap: wrap;   
       gap: 20px;
     }
 
     .var-flex-cards > p {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #c47f00;
-      border-radius: 6px;
-      background-color: #fff3dd;
+     flex: 1 1 250px;   
+    padding: 12px;
+    border: 1px solid #c47f00;
+    border-radius: 6px;
+    background-color: #fff3dd;
     }
 
+
     .var-grid-feature {
+      position: relative;
       display: grid;
       grid-template-columns: 150px auto;
-      gap: 10px;
+      gap: 15px;
       padding: 12px;
       border: 2px solid #c47f00;
       background-color: #fff3dd;
@@ -201,7 +204,103 @@
   text-transform: uppercase;
   opacity: 0.7;
 }
+.corner-badge {
+  position: absolute;
+  top: -12px;    
+  background-color: #c47f00;
+  color: #fff8ef;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  letter-spacing: 1px;
+}
+.info-section {
+  max-width: 700px;
+  margin: 60px auto 0;
+  padding: 30px;
+  background-color: #fff3dd;
+  border: 3px double #c47f00;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
 
+.info-section h3 {
+  font-family: "Cinzel", serif;
+  font-size: 24px;
+  color: #8b3a00;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  border-bottom: 2px solid #c47f00;
+  padding-bottom: 5px;
+  width: fit-content;
+}
+
+.info-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+.info-section ul li {
+  font-size: 18px;
+  margin: 6px 0;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 600px) {
+  .var-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .var-grid-3col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .var-grid-3col {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .var-flex-2col > p {
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .menu-container {
+    padding: 15px;
+    border-width: 3px;
+  }
+}
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 34px;
+  }
+
+  h3, h4 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .corner-badge {
+    top: -10px;
+    right: -10px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .info-section {
+    padding: 20px;
+    margin-top: 40px;
+  }
+}
 
   </style>
 </head>
@@ -212,19 +311,6 @@
     <header>
       <h1>Turmeric</h1>
       <p>PAN-INDIAN RESTAURANT + BAR</p>
-
-      <h3 class="var-position">Contact</h3>
-      <ul>
-        <li><strong>Address:</strong> The Loop, 6679 Delmar Blvd, St. Louis, MO 63130</li>
-        <li><strong>Phone:</strong> (314) 899-9995</li>
-        <li><strong>Instagram:</strong> <a href="https://www.instagram.com/turmericstl/">Turmeric STL</a></li>
-      </ul>
-
-      <h3>Restaurant Hours</h3>
-      <ul>
-        <li><strong>Sunday–Thursday:</strong> 11:30am–2:30pm, 5pm–9:30pm</li>
-        <li><strong>Friday & Saturday:</strong> 11:30am–2:30pm, 5pm–10pm</li>
-      </ul>
     </header>
 
     <hr>
@@ -248,7 +334,7 @@
 
       <hr>
 
-      <h4>Entrees <span class="var-float">Chef’s Pick</span></h4>
+      <h4>Entrees</h4>
       <ul class="var-flex-2col">
 
         <p>
@@ -279,9 +365,17 @@
         <p>Chicken Tikka Masala <em>$17</em></p>
        
         <p class="var-grid-feature">
-          <span class="item-name">"Home Style" Special Chicken Curry</span>
-          <em>$17</em>
-        </p>
+          <span class="corner-badge">Chef’s Pick</span>
+
+          <span class="item-name">
+            "Home Style" Special Chicken Curry
+           </span>
+
+            <em>$17</em>
+          </p>
+
+
+
     
       </ul>
 
@@ -330,6 +424,26 @@
     </main>
 
   </div>
+
+  <div class="info-section">
+
+  <h3>Contact</h3>
+  <ul>
+    <li><strong>Address:</strong> The Loop, 6679 Delmar Blvd, St. Louis, MO 63130</li>
+    <li><strong>Phone:</strong> (314) 899-9995</li>
+    <li><strong>Instagram:</strong> 
+      <a href="https://www.instagram.com/turmericstl/">Turmeric STL</a>
+    </li>
+  </ul>
+
+  <h3>Restaurant Hours</h3>
+  <ul>
+    <li><strong>Sunday–Thursday:</strong> 11:30am–2:30pm, 5pm–9:30pm</li>
+    <li><strong>Friday & Saturday:</strong> 11:30am–2:30pm, 5pm–10pm</li>
+  </ul>
+
+</div>
+
   <footer>
     <p class="footer-note">Thank you for dining with us</p>
   </footer>
