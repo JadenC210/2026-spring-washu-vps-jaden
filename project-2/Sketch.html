@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invisible Cities — Digital Blueprint Atlas</title>
+
+<style>
+:root {
+    --bg: #05070d;
+    --line-primary: #4ec9ff;
+    --line-secondary: #2b9acb;
+    --glow: #7fe8ff;
+    --accent: #f2d28f;
+    --text-main: #e8e8e8;
+    --violet: #c792ea;
+    --neon-green: #89ffdd;
+    --soft-red: #ff6e6e;
+    --soft-blue: #9cdcfe;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text-main);
+    font-family: "Georgia", serif;
+    overflow-x: hidden;
+}
+
+
+.header {
+    padding: 4rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.header h1 {
+    font-size: 2.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+
+    background: linear-gradient(
+        90deg,
+        var(--soft-blue),
+        var(--violet),
+        var(--neon-green),
+        var(--soft-blue)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: titleGlow 6s linear infinite;
+}
+
+
+.dialogue {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.4rem 1.8rem;
+    background: rgba(10, 14, 24, 0.9);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    font-style: italic;
+    line-height: 1.7;
+
+    color: var(--soft-blue);
+    text-shadow:
+        0 0 6px var(--soft-blue),
+        0 0 12px rgba(127,232,255,0.4);
+}
+
+
+.blueprint-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+}
+
+.blueprint {
+    position: relative;
+    width: min(900px, 100vw - 2rem);
+    height: 60vh;
+    min-height: 420px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: radial-gradient(circle at top, #0b101c 0%, #05070d 60%, #020308 100%);
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    transform-origin: center;
+    transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.blueprint::before,
+.blueprint::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.blueprint::before {
+    background-image:
+        linear-gradient(to right, rgba(78,201,255,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(78,201,255,0.18) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.blueprint::after {
+    background-image:
+        linear-gradient(to right, rgba(43,154,203,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(43,154,203,0.18) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mix-blend-mode: screen;
+}
+
+
+.compass-arc {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(127,232,255,0.0);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(-40deg);
+    pointer-events: none;
+}
+
+.compass-arc::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border-top: 2px solid rgba(127,232,255,0.9);
+    border-left: 2px solid rgba(127,232,255,0.4);
+    border-right: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    opacity: 0;
+}
+
+.city-node {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: radial-gradient(circle at top, rgba(127,232,255,0.18), rgba(5,8,16,0.95));
+    box-shadow: 0 0 18px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition:
+        left 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+        top 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 0.3s ease,
+        transform 0.3s ease,
+        border-color 0.3s ease;
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--soft-blue);
+}
+
+.city-node:hover {
+    box-shadow: 0 0 24px rgba(127,232,255,0.9);
+    border-color: var(--glow);
+    transform: translateY(-4px);
+    animation: holoShift 3s linear infinite
+}
+
+.city-node.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 26px var(--accent), 0 0 40px var(--glow);
+    color: var(--accent);
+}
+
+
+.city-panel {
+    max-width: 760px;
+    margin: 0 auto 3rem;
+    padding: 1.8rem 2.2rem;
+    border-radius: 18px;
+    background: var(--panel-bg);
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 0 30px rgba(0,0,0,0.85);
+    display: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.city-panel::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle at top left, rgba(127,232,255,0.12), transparent 60%);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.city-panel h2 {
+    font-size: 1.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.city-panel .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 0.8rem;
+}
+
+.city-panel p {
+    font-size: 1rem;
+    line-height: 1.8;
+    opacity: 0.9;
+}
+.revision-mark {
+    color: var(--soft-red);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+.annotation {
+    color: var(--neon-green);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+}
+
+footer {
+    text-align: center;
+    padding: 2.5rem 1rem 3rem;
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+@keyframes titleGlow {
+    0%   { filter: drop-shadow(0 0 6px var(--soft-blue)); }
+    25%  { filter: drop-shadow(0 0 8px var(--violet)); }
+    50%  { filter: drop-shadow(0 0 10px var(--neon-green)); }
+    75%  { filter: drop-shadow(0 0 8px var(--violet)); }
+    100% { filter: drop-shadow(0 0 6px var(--soft-blue)); }
+}
+
+@keyframes compassSweep {
+    0%   { opacity: 0; transform: translate(-50%, -50%) rotate(-40deg); }
+    10%  { opacity: 1; }
+    70%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -50%) rotate(40deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Invisible Cities</h1>
+    <div class="dialogue">
+        “The map you ask for,” said the traveler, “cannot be fixed to a single sheet.  
+        Each city redraws the lines of all the others.”  
+        The emperor watched the glowing plan shift, as if the empire itself were thinking.
+    </div>
+</div>
+
+<div class="blueprint-wrapper">
+    <div class="blueprint" id="blueprint">
+        <div class="compass-arc" id="compassArc"></div>
+
+        <div class="city-node" data-target="memory">Cities &amp; Memory</div>
+        <div class="city-node" data-target="desire">Cities &amp; Desire</div>
+        <div class="city-node" data-target="signs">Cities &amp; Signs</div>
+        <div class="city-node" data-target="thin">Thin Cities</div>
+        <div class="city-node" data-target="trading">Trading Cities</div>
+    </div>
+</div>
+
+<div class="city-panel" id="panel-memory">
+    <div class="tag">Topology</div>
+    <h2>Cities &amp; Memory</h2>
+    <p>
+        These cities are assembled from recollection: plazas shaped like forgotten afternoons,
+        bridges echoing footsteps of those long gone. To walk here is to wander through your own
+        past, rearranged into new geometries. Each corner feels familiar, yet no map you carry
+        matches what you see.
+    </p>
+</div>
+
+<div class="city-panel" id="panel-desire">
+    <div class="tag">Vector</div>
+    <h2>Cities &amp; Desire</h2>
+    <p>
+        Desire stretches the streets and pulls towers upward, filling the air with the scent of
+        what has not yet happened. These cities shimmer with possibilities: each doorway a
+        promise, each window a longing. The plan redraws itself around what you seek, as if the
+        grid were following your gaze.
+    </p>
+</div>
+
+<div class="city-panel" id="panel-signs">
+    <div class="tag">Notation</div>
+    <h2>Cities &amp; Signs</h2>
+    <p>
+        Here, nothing is what it seems. A fountain may signify departure; a staircase may mean
+        return. Travelers learn to read the city as one reads a text, deciphering symbols left
+        by those who passed before. The blueprint is dense with annotations, but none of them
+        agree on what the city truly is.
+    </p>
+</div>
+
+<div class="city-panel" id="panel-thin">
+    <div class="tag">Section</div>
+    <h2>Thin Cities</h2>
+    <p>
+        Suspended between earth and sky, these cities balance on threads, ropes, and breath.
+        Their structures are so light that a whispered story can shift the entire skyline.
+        On the plan they appear as faint lines and dotted spans, as if the architect were
+        unsure whether to commit them to paper at all.
+    </p>
+</div>
+
+<div class="city-panel" id="panel-trading">
+    <div class="tag">Flow</div>
+    <h2>Trading Cities</h2>
+    <p>
+        Goods move through these cities, but so do stories. Every exchange alters the city’s
+        shape: a market stall becomes a memory, a negotiation becomes a new street. The
+        blueprint shows arrows, loops, and crossings, yet the true traffic is in the tales
+        that change hands at every intersection.
+    </p>
+</div>
+
+<footer>
+    A digital blueprint atlas inspired by Italo Calvino’s <em>Invisible Cities</em>.
+</footer>
+
+<script>
+const blueprint = document.getElementById('blueprint');
+const nodes = document.querySelectorAll('.city-node');
+const panels = document.querySelectorAll('.city-panel');
+const compassArc = document.getElementById('compassArc');
+
+let rotation = 0;
+
+
+function randomizeNodes() {
+    const rect = blueprint.getBoundingClientRect();
+    const padding = 60;
+    const cols = 4;
+    const rows = 3;
+
+    nodes.forEach((node, index) => {
+        const col = (index + Math.floor(Math.random() * cols)) % cols;
+        const row = (index + Math.floor(Math.random() * rows)) % rows;
+
+        const x = padding + col * ((rect.width - padding * 2) / (cols - 1));
+        const y = padding + row * ((rect.height - padding * 2) / (rows - 1));
+
+        node.style.left = x + "px";
+        node.style.top = y + "px";
+    });
+}
+
+function showCity(targetId) {
+    panels.forEach(p => p.style.display = 'none');
+    nodes.forEach(n => n.classList.remove('active'));
+
+    const panel = document.getElementById('panel-' + targetId);
+    if (panel) panel.style.display = 'block';
+
+    const activeNode = Array.from(nodes).find(n => n.dataset.target === targetId);
+    if (activeNode) activeNode.classList.add('active');
+
+    rotation += (Math.random() * 10 - 5);
+    blueprint.style.transform = `rotate(${rotation}deg)`;
+
+    compassArc.style.animation = 'none';
+    void compassArc.offsetWidth;
+    compassArc.style.animation = 'compassSweep 1.2s ease-out';
+
+    randomizeNodes();
+
+    window.scrollTo({
+        top: panel.offsetTop - 40,
+        behavior: 'smooth'
+    });
+}
+
+
+nodes.forEach(node => {
+    node.addEventListener('click', () => {
+        const target = node.dataset.target;
+        showCity(target);
+    });
+});
+
+
+window.addEventListener('load', () => {
+    randomizeNodes();
+});
+</script>
+
+</body>
+</html>
