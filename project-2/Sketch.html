@@ -292,46 +292,36 @@ something will stick in the mind.
 </div>
 
 <div class="city-panel" id="panel-memory">
-    <div class="tag">Topology</div>
+    <div class="tag">Recollection</div>
     <h2>Cities &amp; Memory</h2>
     <p>
-        These cities are assembled from recollection: plazas shaped like forgotten afternoons,
-        bridges echoing footsteps of those long gone. To walk here is to wander through your own
-        past, rearranged into new geometries. Each corner feels familiar, yet no map you carry
-        matches what you see.
-    </p>
+“Memory is redundant: it repeats signs so that the city can begin to exist.”
+
+    </p>       
+
 </div>
 
 <div class="city-panel" id="panel-desire">
-    <div class="tag">Vector</div>
+    <div class="tag">Longing</div>
     <h2>Cities &amp; Desire</h2>
     <p>
-        Desire stretches the streets and pulls towers upward, filling the air with the scent of
-        what has not yet happened. These cities shimmer with possibilities: each doorway a
-        promise, each window a longing. The plan redraws itself around what you seek, as if the
-        grid were following your gaze.
+        “The city is made of desires and fears, even if the words to say them are lacking.”
     </p>
 </div>
 
 <div class="city-panel" id="panel-signs">
-    <div class="tag">Notation</div>
+    <div class="tag">Code</div>
     <h2>Cities &amp; Signs</h2>
     <p>
-        Here, nothing is what it seems. A fountain may signify departure; a staircase may mean
-        return. Travelers learn to read the city as one reads a text, deciphering symbols left
-        by those who passed before. The blueprint is dense with annotations, but none of them
-        agree on what the city truly is.
+       “The city’s signs form a language, but not the one you think you know.”
     </p>
 </div>
 
 <div class="city-panel" id="panel-thin">
-    <div class="tag">Section</div>
+    <div class="tag">Span</div>
     <h2>Thin Cities</h2>
     <p>
-        Suspended between earth and sky, these cities balance on threads, ropes, and breath.
-        Their structures are so light that a whispered story can shift the entire skyline.
-        On the plan they appear as faint lines and dotted spans, as if the architect were
-        unsure whether to commit them to paper at all.
+        “The city is thin as a sheet of paper, yet it contains the world.”
     </p>
 </div>
 
@@ -339,10 +329,7 @@ something will stick in the mind.
     <div class="tag">Flow</div>
     <h2>Trading Cities</h2>
     <p>
-        Goods move through these cities, but so do stories. Every exchange alters the city’s
-        shape: a market stall becomes a memory, a negotiation becomes a new street. The
-        blueprint shows arrows, loops, and crossings, yet the true traffic is in the tales
-        that change hands at every intersection.
+        “Every city is a place of exchange, as all are.”
     </p>
 </div>
 
@@ -387,8 +374,6 @@ function showCity(targetId) {
     const activeNode = Array.from(nodes).find(n => n.dataset.target === targetId);
     if (activeNode) activeNode.classList.add('active');
 
-    rotation += (Math.random() * 10 - 5);
-    blueprint.style.transform = `rotate(${rotation}deg)`;
 
     compassArc.style.animation = 'none';
     void compassArc.offsetWidth;
