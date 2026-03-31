@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invisible Cities — A Digital Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04060e;
+  --bg2: #070a16;
+  --line: #4ec9ff;
+  --glow: #7fe8ff;
+  --accent: #f2d28f;
+  --text: #dcd8cf;
+  --text-dim: #8a8680;
+  --violet: #c792ea;
+  --teal: #89ffdd;
+  --soft-blue: #9cdcfe;
+  --rose: #ffb3b3;
+  --gold: #f2d28f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+
+
+.site { position: relative; z-index: 1; }
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 2.5rem;
+  background: rgba(4,6,14,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(78,201,255,0.12);
+}
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--soft-blue);
+  text-decoration: none;
+  opacity: 0.8;
+}
+.nav-links {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.nav-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+.nav-pill:hover, .nav-pill.active {
+  color: var(--soft-blue);
+  border-color: var(--soft-blue);
+  background: rgba(78,201,255,0.07);
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+}
+
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  animation: fadeDown 1s ease both;
+}
+
+.hero h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, var(--soft-blue) 0%, var(--violet) 40%, var(--teal) 80%, var(--soft-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite, fadeDown 1.1s ease both;
+}
+
+.hero-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 3.5rem;
+  animation: fadeDown 1.2s ease both;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-dialogue {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  padding: 2rem 2.5rem;
+  background: rgba(9,13,26,0.85);
+  border-radius: 2px;
+  border: 1px solid rgba(78,201,255,0.15);
+  border-left: 2px solid rgba(78,201,255,0.5);
+  animation: fadeUp 1.5s ease both;
+  position: relative;
+}
+.hero-dialogue::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.5rem;
+  font-size: 4rem;
+  font-family: 'Cormorant Garamond', serif;
+  color: rgba(78,201,255,0.2);
+  line-height: 1;
+}
+
+.speaker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.speaker.kublai { color: var(--violet); }
+
+.dialogue-line {
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--soft-blue);
+  opacity: 0.9;
+  margin-bottom: 1.2rem;
+}
+.dialogue-line:last-child { margin-bottom: 0; }
+
+.hero-cta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+  border: 1px solid rgba(137,255,221,0.3);
+  padding: 0.9rem 2.4rem;
+  border-radius: 2px;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.3s;
+  animation: fadeUp 1.8s ease both;
+  text-decoration: none;
+  display: inline-block;
+}
+.hero-cta:hover {
+  background: rgba(137,255,221,0.07);
+  border-color: var(--teal);
+  box-shadow: 0 0 20px rgba(137,255,221,0.15);
+}
+
+.atlas-section {
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-top: 2.5rem;
+}
+
+.atlas-cell {
+  background: var(--bg);
+  padding: 1.8rem 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+}
+.atlas-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(78,201,255,0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.atlas-cell:hover::before { opacity: 1; }
+.atlas-cell:hover { background: rgba(9,13,26,0.95); }
+
+.cell-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+.cell-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--soft-blue);
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+.atlas-cell:hover .cell-title { color: var(--teal); }
+.cell-cities {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.theme-page {
+  display: none;
+  min-height: 100vh;
+  padding: 8rem 2rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: pageReveal 0.8s ease both;
+}
+.theme-page.visible { display: block; }
+
+@keyframes pageReveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.theme-header {
+  margin-bottom: 4rem;
+  position: relative;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.theme-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 1rem;
+}
+.theme-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.theme-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 20px;
+  border: 1px solid;
+  display: inline-block;
+}
+
+.theme-memory  .theme-title, .theme-memory  .theme-tag { color: var(--soft-blue); border-color: rgba(156,220,254,0.3); }
+.theme-desire  .theme-title, .theme-desire  .theme-tag { color: var(--rose); border-color: rgba(255,179,179,0.3); }
+.theme-signs   .theme-title, .theme-signs   .theme-tag { color: var(--teal); border-color: rgba(137,255,221,0.3); }
+.theme-thin    .theme-title, .theme-thin    .theme-tag { color: var(--violet); border-color: rgba(199,146,234,0.3); }
+.theme-trading .theme-title, .theme-trading .theme-tag { color: var(--gold); border-color: rgba(242,210,143,0.3); }
+.theme-eyes    .theme-title, .theme-eyes    .theme-tag { color: var(--soft-blue); border-color: rgba(156,220,254,0.3); }
+.theme-names   .theme-title, .theme-names   .theme-tag { color: var(--teal); border-color: rgba(137,255,221,0.3); }
+.theme-dead    .theme-title, .theme-dead    .theme-tag { color: var(--rose); border-color: rgba(255,179,179,0.3); }
+.theme-sky     .theme-title, .theme-sky     .theme-tag { color: var(--violet); border-color: rgba(199,146,234,0.3); }
+.theme-continuous .theme-title, .theme-continuous .theme-tag { color: var(--gold); border-color: rgba(242,210,143,0.3); }
+.theme-hidden  .theme-title, .theme-hidden  .theme-tag { color: var(--soft-blue); border-color: rgba(156,220,254,0.3); }
+
+
+.city-entries { display: flex; flex-direction: column; gap: 3rem; }
+
+.city-entry {
+  position: relative;
+  padding: 2.2rem 2.5rem;
+  background: rgba(7,10,22,0.8);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.4s;
+}
+.city-entry:hover { border-color: rgba(78,201,255,0.2); }
+.city-entry::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(78,201,255,0.2), transparent);
+}
+
+.city-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.3rem;
+}
+.city-roman {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 1.4rem;
+  display: block;
+}
+
+.city-quote {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  font-style: italic;
+  color: rgba(220,216,207,0.82);
+  margin-bottom: 1.2rem;
+  padding-left: 1.2rem;
+  border-left: 1px solid rgba(255,255,255,0.15);
+}
+
+.city-desc {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text-dim);
+}
+
+.back-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  text-decoration: none;
+}
+.back-btn:hover {
+  color: var(--soft-blue);
+  border-color: rgba(78,201,255,0.4);
+}
+
+footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  z-index: 1;
+}
+footer p {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  line-height: 2;
+}
+footer em { color: rgba(156,220,254,0.7); font-style: italic; }
+
+.rune-divider {
+  text-align: center;
+  color: var(--text-dim);
+  letter-spacing: 0.8em;
+  font-size: 0.5rem;
+  margin: 2.5rem 0;
+  opacity: 0.4;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+  opacity: 0;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.2; }
+  100% { transform: translateY(-20vh) translateX(40px); opacity: 0; }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(78,201,255,0.25); border-radius: 2px; }
+
+@media (max-width: 600px) {
+  nav { padding: 0.9rem 1rem; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.2rem 3rem; }
+  .city-entry { padding: 1.5rem; }
+  .dialogue-block { padding: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="particles" id="particles"></div>
+
+<div class="site">
+
+<div id="page-home" class="site">
+
+  <section class="hero">
+    <p class="hero-eyebrow">Italo Calvino · 1972 · A Digital Atlas</p>
+    <h1>Invisible Cities</h1>
+    <p class="hero-sub">Le Città Invisibili</p>
+
+    <div class="hero-dialogue">
+      <span class="speaker">Marco Polo</span>
+      <p class="dialogue-line">"Arriving at each new city, the traveler finds again a past of his that he did not know he had: the foreignness of what you no longer are or no longer possess lies in wait for you in foreign, unpossessed places."</p>
+      <span class="speaker kublai">Kublai Khan</span>
+      <p class="dialogue-line">"Tell me another city."</p>
+    </div>
+
+    <a class="hero-cta" href="#atlas" onclick="document.getElementById('atlas').scrollIntoView({behavior:'smooth'})">Enter the Atlas ↓</a>
+  </section>
+
+  <section class="atlas-section" id="atlas">
+    <p class="section-label">— Eleven Categories of Dreaming —</p>
+    <h2 style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:300; letter-spacing:0.1em; color:var(--text); margin-bottom:0.5rem;">The Cities of Khan's Empire</h2>
+    <p style="font-size:0.95rem; color:var(--text-dim); line-height:1.8; max-width:560px; margin-bottom:0.5rem;">Marco Polo describes 55 cities to the emperor Kublai Khan. Select a category to enter.</p>
+
+    <div class="atlas-grid">
+      <a class="atlas-cell" href="#" onclick="showPage('memory')">
+        <span class="cell-num">I</span>
+        <span class="cell-title">Cities &amp; Memory</span>
+        <span class="cell-cities">Diomira · Isidora · Zaira · Zora · Maurilia</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('desire')">
+        <span class="cell-num">II</span>
+        <span class="cell-title">Cities &amp; Desire</span>
+        <span class="cell-cities">Dorothea · Anastasia · Despina · Fedora · Zobeide</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('signs')">
+        <span class="cell-num">III</span>
+        <span class="cell-title">Cities &amp; Signs</span>
+        <span class="cell-cities">Tamara · Zoe · Zirma · Hypatia · Olivia</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('thin')">
+        <span class="cell-num">IV</span>
+        <span class="cell-title">Thin Cities</span>
+        <span class="cell-cities">Isaura · Zenobia · Armilla · Sophronia · Octavia</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('trading')">
+        <span class="cell-num">V</span>
+        <span class="cell-title">Trading Cities</span>
+        <span class="cell-cities">Euphemia · Chloe · Eutropia · Ersilia · Esmeralda</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('eyes')">
+        <span class="cell-num">VI</span>
+        <span class="cell-title">Cities &amp; Eyes</span>
+        <span class="cell-cities">Valdrada · Zemrude · Baucis · Phyllis · Moriana</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('names')">
+        <span class="cell-num">VII</span>
+        <span class="cell-title">Cities &amp; Names</span>
+        <span class="cell-cities">Aglaura · Leonia · Pyrrha · Clarice · Irene</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('dead')">
+        <span class="cell-num">VIII</span>
+        <span class="cell-title">Cities &amp; the Dead</span>
+        <span class="cell-cities">Melania · Adelma · Eusapia · Argia · Laudomia</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('sky')">
+        <span class="cell-num">IX</span>
+        <span class="cell-title">Cities &amp; the Sky</span>
+        <span class="cell-cities">Eudoxia · Beersheba · Thekla · Perinthia · Andria</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('continuous')">
+        <span class="cell-num">X</span>
+        <span class="cell-title">Continuous Cities</span>
+        <span class="cell-cities">Leonia · Trude · Cecilia · Penthesilea</span>
+      </a>
+      <a class="atlas-cell" href="#" onclick="showPage('hidden')">
+        <span class="cell-num">XI</span>
+        <span class="cell-title">Hidden Cities</span>
+        <span class="cell-cities">Olinda · Raissa · Marozia · Teodora · Berenice</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>A digital atlas inspired by <em>Invisible Cities</em> by Italo Calvino.</p>
+    <p style="margin-top:0.5rem; font-size:0.75rem;">"Cities, like dreams, are made of desires and fears,<br>even if the thread of their discourse is secret."</p>
+  </footer>
+</div>
+
+<div id="page-memory" class="theme-page theme-memory">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; Memory</h1>
+    <span class="theme-tag">Recollection</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Diomira</h2>
+      <p class="city-quote">"Leaving there and proceeding for three days toward the east, you reach Diomira, a city with sixty silver domes, bronze statues of all the gods, streets paved with lead, a crystal theater, a golden cock that crows each morning on a tower."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Isidora</h2>
+      <p class="city-quote">"He was thinking of all these things when he desired a city. Isidora, therefore, is the city of his dreams: with one difference. The dreamed-of city contained him as a young man; he arrives at Isidora in his old age. In the square there is the wall where the old men sit and watch the young go by; he is seated in a row with them. Desires are already memories."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Zaira</h2>
+      <p class="city-quote">"The city does not tell its past, but contains it like the lines of a hand, written in the corners of the streets, the gratings of the windows, the banisters of the steps, the antennae of the lightning rods, the poles of the flags."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Zora</h2>
+      <p class="city-quote">"Zora has the quality of remaining in your memory point by point, in its succession of streets, of houses, of shops... This city which cannot be expunged from the mind is like an armature, a honeycomb in whose cells each of us can place the things he wants to remember."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Maurilia</h2>
+      <p class="city-quote">"In Maurilia, the traveler is invited to visit the city and, at the same time, to examine some old postcards that show it as it used to be... The foreigner who does not wish to disappoint the inhabitants must praise the postcard city and prefer it to the present one."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-desire" class="theme-page theme-desire">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; Desire</h1>
+    <span class="theme-tag">Longing</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Dorothea</h2>
+      <p class="city-quote">"There are two ways of describing the city of Dorothea: you can say that four aluminum towers rise from its walls flanking seven gates with spring-operated drawbridges that span the moat whose water feeds four green canals which cross the city, dividing it into nine quarters, each with three hundred houses and seven hundred chimneys."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Anastasia</h2>
+      <p class="city-quote">"When you are in the heart of Anastasia one morning your desires waken all at once and surround you. The city appears to you as a whole where no desire is lost and of which you are a part, and since it enjoys everything you do not enjoy, you can do nothing but inhabit this desire and be content."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Despina</h2>
+      <p class="city-quote">"Despina can be reached in two ways: by ship or by camel. The city displays one face to the traveler arriving overland and a different one to him who arrives by sea. Each city receives its form from the desert it opposes."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Fedora</h2>
+      <p class="city-quote">"In the center of Fedora, that gray stone metropolis, stands a metal building with a crystal globe in every room. Looking into each globe, you see a blue city, the model of a different Fedora."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Zobeide</h2>
+      <p class="city-quote">"They tell this tale of its foundation: men of various nations had an identical dream. They saw a woman running at night through an unknown city; she was seen from behind, with long hair, and she was naked. They dreamed of pursuing her."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-signs" class="theme-page theme-signs">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; Signs</h1>
+    <span class="theme-tag">Interpretation</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Tamara</h2>
+      <p class="city-quote">"Your gaze scans the streets as if they were written pages: the city says everything you must think, makes you repeat her discourse, and while you believe you are visiting Tamara you are only recording the names with which she defines herself."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Zobia</h2>
+      <p class="city-quote">"He infers this: if existence in all its moments is all of itself, Zoe is the place of indivisible existence. But why, then, does the city exist? What line separates the inside from the outside, the rumble of wheels from the howl of wolves?"</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Zirma</h2>
+      <p class="city-quote">"Memory is redundant: it repeats signs so that the city can begin to exist. The city does not tell its past, but it contains it."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Raucona</h2>
+      <p class="city-quote">"Signs form a language, but not the one you think you know."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Olivia</h2>
+      <p class="city-quote">"No one, wise Kublai, knows better than you that the city must never be confused with the words that describe it. And yet between the one and the other there is a connection."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-thin" class="theme-page theme-thin">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Thin Cities</h1>
+    <span class="theme-tag">Suspension</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Isaura</h2>
+      <p class="city-quote">"Isaura, city of the thousand wells, is said to rise over a deep, subterranean lake. On all sides, wherever the inhabitants dig long vertical holes in the ground, they succeed in drawing up water, as far as the city extends, and no farther."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Zenobia</h2>
+      <p class="city-quote">"Whether Zenobia is to be classified among happy cities or among the unhappy ones is a question that... depends on the meaning you give to the word 'happy.'"</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Armilla</h2>
+      <p class="city-quote">"Whether Armilla is like this because it is unfinished or because it has been demolished, whether the cause is some enchantment or only a whim, I do not know. The fact remains that it has no walls, no ceilings, no floors: it has pipes, water mains, spigots and stopcocks, showers, washbasins, bathtubs, laundry tubs, kitchen sinks, bidet."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Sophronia</h2>
+      <p class="city-quote">"The city of Sophronia is made up of two half-cities. In one there is the great roller coaster with its steep humps, the carousel with its chain spokes, the Ferris wheel of spinning cages, the death-ride with crouching motorcyclists, the big top with the clump of trapezes hanging in the middle."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Octavia</h2>
+      <p class="city-quote">"Now I shall tell you how Octavia, the spider-web city, is made. There is a precipice between two steep mountains: the city is over the void, bound to the two crests with ropes and chains and catwalks. You walk on the little wooden ties, careful not to set your foot in the open spaces, or you cling to the hempen strands."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-trading" class="theme-page theme-trading">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Trading Cities</h1>
+    <span class="theme-tag">Exchange</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Euphemia</h2>
+      <p class="city-quote">"You do not come to Euphemia only to buy and sell, but also because at night, by the fires all around the market, seated on sacks or barrels or stretched out on piles of carpets, at each word that one man says -- such as 'wolf', 'sister', 'hidden treasure', 'battle' -- the others tell, each one, his tale."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Chloe</h2>
+      <p class="city-quote">"In Chloe, a great city, the people who move through the streets are all strangers. At each encounter, they imagine a thousand things about one another... but no words are exchanged, no one looks anyone else in the eye."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Eutropia</h2>
+      <p class="city-quote">"Each of the cities of Eutropia is the same in structure... When boredom sets in, the inhabitants move to the next city, which is the same but different."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Ersilia</h2>
+      <p class="city-quote">"In Ersilia, to establish the relationships that sustain the city's life, the inhabitants stretch strings from the corners of the houses, white or black or gray or black-and-white according to whether they mark a relationship of blood, of trade, authority, agency. When the strings become so numerous that you can no longer pass among them, the inhabitants leave: the houses are dismantled; only the strings and their supports remain."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Esmeralda</h2>
+      <p class="city-quote">"In Esmeralda, city of water, a network of canals and a network of streets span and intersect each other. To go from one place to another you have always the choice between land and boat: and since the shortest distance between two points in Esmeralda is not a straight line but a zigzag that ramifies in tortuous optional routes, the ways that open to each passerby are never two, but many."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-eyes" class="theme-page theme-eyes">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; Eyes</h1>
+    <span class="theme-tag">Perception</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Valdrada</h2>
+      <p class="city-quote">"The ancients built Valdrada on the shores of a lake, with houses all verandas one above the other, and high streets whose railed parapets look out over the water. Thus the traveler, arriving, sees two cities: one erect above the lake, and the other reflected, inverted, in the water."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Zemrude</h2>
+      <p class="city-quote">"If you go by whistling, your nose a-tilt behind the whistle, you will know it from below: window sills, flapping curtains, fountains. If you walk along hanging your head, your nails dug into the palms of your hands, your gaze will be held on the ground, in the gutters, the manhole covers, the fish scales, wastepaper."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Baucis</h2>
+      <p class="city-quote">"The traveler directed toward Baucis cannot see the city and yet he has arrived. The slender stilts that rise from the ground at a great distance from one another and are lost above the clouds support the city. You climb them with ladders. On the ground the inhabitants rarely show themselves: having already everything they need up there, they prefer not to come down."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Phyllis</h2>
+      <p class="city-quote">"When you have arrived at Phyllis, you rejoice in observing all the bridges over the canals, each different from the others: cambered, covered, on pillars, on barges, suspended, with tracery balustrades. And what a variety of windows looks down on the streets: mullioned, Moorish, lancet, pointed, surmounted by lunettes or stained-glass roses."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Moriana</h2>
+      <p class="city-quote">"I shall describe to you the city of Moriana, its alabaster gates transparent in the sunlight, its coral columns supporting pediments encrusted with serpentine, its villas all of glass like aquariums where the shadows of dancing girls with silvery scales swim beneath the medusa-shaped chandeliers."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-names" class="theme-page theme-names">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; Names</h1>
+    <span class="theme-tag">Identity</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Aglaura</h2>
+      <p class="city-quote">"In Aglaura... the discourse consists of very little: a few facts, a few stories, and the name. The name becomes so heavy with the city's stories that the true city, underneath, is crushed."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Pyrrha</h2>
+      <p class="city-quote">"For a long time Pyrrha to me was a fortified city on the slopes of a bay, with high windows and towers, enclosed like a goblet, with a central square deep as a well, with a well in its center. I had never seen it. The day came when my travels took me to Pyrrha. As soon as I arrived, everything I had imagined was forgotten; Pyrrha had become what is Pyrrha."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Clarice</h2>
+      <p class="city-quote">"Clarice, the glorious city, has a tormented history. Several times it decayed, then burgeoned again, always keeping the first Clarice as an unparalleled model of every splendor, compared to which the city's present state can only cause more sighs at every fading of the stars."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Irene</h2>
+      <p class="city-quote">"Irene is the city visible when you lean out from the edge of the plateau at the hour when the lights come on, and in the limpid air, the pink of the settlement can be discerned spread out in the distance below. Irene is a name for a city in the distance, and if you approach, it changes."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--teal)">Leonia</h2>
+      <p class="city-quote">"The city of Leonia refashions itself every day: every morning the people wake between fresh sheets, wash with just-unwrapped cakes of soap, wear brand-new clothing, take from the latest model refrigerator still unopened tins, listening to the last-minute jingles from the most up-to-date radio."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-dead" class="theme-page theme-dead">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; the Dead</h1>
+    <span class="theme-tag">Echo</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Melania</h2>
+      <p class="city-quote">"At Melania, every time you enter the square, you find yourself caught in a dialogue: the braggart soldier and the parasite coming from a door meet the young wastrel and the prostitute; or else the miserly father from his threshold utters his final warnings to the amorous daughter and is interrupted by the foolish servant."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Adelma</h2>
+      <p class="city-quote">"It was dusk when I landed at Adelma. On the dock the sailor who caught the rope and tied it to the bollard resembled a man who had soldiered with me and was dead. An old man was loading a basket of sea urchins on a cart; I thought I recognized him; when I turned, he had disappeared down an alley."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Eusapia</h2>
+      <p class="city-quote">"No city is more inclined than Eusapia to enjoy life and flee care. And to make the leap from life to death less abrupt, the inhabitants have constructed an identical copy of their city, underground. All corpses, dried in such a way that the skeleton remains sheathed in yellow skin, are carried down there, to continue their former activities."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Argia</h2>
+      <p class="city-quote">"What makes Argia different from other cities is that it has earth instead of air. The streets are completely filled with dirt, clay packs the rooms to the ceiling, on every stair another stairway is set in negative, over the roofs of the houses hang layers of rocky terrain like skies with clouds."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--rose)">Laudomia</h2>
+      <p class="city-quote">"Like Laudomia, every city has at its side another city whose inhabitants are called by the same names: it is the Laudomia of the dead, the cemetery. But Laudomia's special faculty is that of being not only double, but triple; it comprehends, in short, a third Laudomia, the city of the unborn."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-sky" class="theme-page theme-sky">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Cities &amp; the Sky</h1>
+    <span class="theme-tag">Constellation</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Eudoxia</h2>
+      <p class="city-quote">"In Eudoxia, which spreads both upward and down, with winding alleys, steps, dead ends, hovels, a carpet is preserved in which you can observe the city's true form. At first sight nothing seems to resemble Eudoxia less than the design of that carpet, laid out in symmetrical motives whose patterns are repeated along straight and circular lines."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Beersheba</h2>
+      <p class="city-quote">"This belief is handed down in Beersheba: that, suspended in the heavens, there exists another Beersheba, where the city's most elevated virtues and sentiments are poised, and that if the terrestrial Beersheba will take the celestial one as its model the two cities will become one."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Thekla</h2>
+      <p class="city-quote">"Those who arrive at Thekla can see little of the city, beyond the plank fences, the sackcloth screens, the scaffoldings, the metal armatures, the wooden catwalks hanging from ropes or supported by sawhorses, the ladders, the trestles. If you ask, 'Why is Thekla's construction taking such a long time?' the inhabitants answer, 'So that its destruction cannot begin.'"</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Perinthia</h2>
+      <p class="city-quote">"In Perinthia, the astronomers established the place and the day according to the position of the stars; they drew the intersecting lines of the decumanus and the cardo, the first oriented to the passage of the sun and the other like the axis on which the heavens turn. They divided the map according to the twelve houses of the zodiac so that each temple and each neighborhood would receive the proper influence of the favoring constellations."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--violet)">Andria</h2>
+      <p class="city-quote">"Andria was built so artfully that its every street follows a planet's orbit, and the buildings and the places of community life repeat the order of the constellations and the position of the most luminous stars. The city's calendar is so regulated that jobs and offices and ceremonies are arranged in a map corresponding to the firmament on that date: and thus the days on earth and the nights in the sky reflect each other."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-continuous" class="theme-page theme-continuous">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Continuous Cities</h1>
+    <span class="theme-tag">Expansion</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Leonia</h2>
+      <p class="city-quote">"The city of Leonia refashions itself every day: every morning the people wake between fresh sheets, wash with just-unwrapped cakes of soap, wear brand-new clothing, take from the latest model refrigerator still unopened tins, listening to the last-minute jingles from the most up-to-date radio. On the sidewalks, encased in spotless plastic bags, the remains of yesterday's Leonia await the garbage truck."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Trude</h2>
+      <p class="city-quote">"If on arriving at Trude I had not read the city's name written in big letters, I would have thought I was landing at the same airport from which I had taken off. The suburbs they drove me through were no different from the others, with the same little greenish and yellowish houses."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Cecilia</h2>
+      <p class="city-quote">"In the streets of Cecilia, an illustrious city, I met once a goatherd, driving a tinkling flock along the walls. 'Man blessed by heaven,' he asked me, 'can you tell me the name of the city in which we are?' 'May the gods accompany you!' I cried. 'How can you fail to recognize the illustrious city of Cecilia?'"</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--gold)">Penthesilea</h2>
+      <p class="city-quote">"To tell you about Penthesilea I should begin by describing the entrance to the city. You advance for hours and it is not clear to you whether you are already in the city's midst or still outside it. If you ask the people you meet, 'Where is Penthesilea?' they make a broad gesture which may mean 'here', or else 'farther on', or 'all around you', or even 'in the opposite direction.'"</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+<div id="page-hidden" class="theme-page theme-hidden">
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+
+  <div class="theme-header">
+    <h1 class="theme-title">Hidden Cities</h1>
+    <span class="theme-tag">Veil</span>
+  </div>
+
+  <div class="city-entries">
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Olinda</h2>
+      <p class="city-quote">"In Olinda, if you go out with a magnifying glass and hunt carefully, you may find somewhere a point no bigger than the head of a pin which, if you look at it slightly enlarged, reveals within itself the roofs, the antennas, the skylights, the gardens, the pools, the streamers across the streets, the kiosks in the squares, the horse-racing track."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Raissa</h2>
+      <p class="city-quote">"In Raissa, life is not happy. People wring their hands as they walk in the streets, curse the crying children, lean on the railings over the river and press their fists to their temples. And yet, in Raissa, at every moment there is a child in a window who laughs seeing a dog that has jumped on a shed to bite into a piece of polenta dropped by a stonemason."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Marozia</h2>
+      <p class="city-quote">"A sibyl, questioned about Marozia's fate, said: 'I see two cities: one of the rat, one of the swallow.' Today Marozia is a city where all run through leaden passages like packs of rats who tear from one another's teeth the leftovers which fall from the teeth of the most voracious ones."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Teodora</h2>
+      <p class="city-quote">"Having finally expelled the animals, Teodora is the only city in the world, and now, to make sure it does not crumble, it must preserve intact the memory of the animals it has supplanted."</p>
+    </div>
+
+    <div class="city-entry">
+      <h2 class="city-name" style="color:var(--soft-blue)">Berenice</h2>
+      <p class="city-quote">"I should not tell you of Berenice, the unjust city, which crowns with triglyphs, abaci, metopes the gears of its meat-grinding machines. Instead, I should tell you of the hidden Berenice, the city of the just, handling makeshift materials in the shadowy rooms behind the shops and beneath the stairs, linking a network of wires and pipes and pulleys."</p>
+    </div>
+
+  </div>
+
+  <div class="rune-divider">· · · · ·</div>
+  <div style="padding: 3rem 0; text-align:center;">
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem; line-height:1.9; color:var(--text-dim); max-width:520px; margin:0 auto 1.5rem;">"The inferno of the living is not something that will be; if there is one, it is what is already here, the inferno where we live every day, that we form by being together. There are two ways to escape suffering it. The first is easy for many: accept the inferno and become such a part of it that you can no longer see it. The second is risky and demands constant vigilance and apprehension: seek and learn to recognize who and what, in the midst of the inferno, are not inferno, then make them endure, give them space."</p>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; color:var(--text-dim)">— Italo Calvino, Invisible Cities</span>
+  </div>
+  <a class="back-btn" href="#" onclick="showPage('home')">← Return to Atlas</a>
+</div>
+
+</div>
+
+<script>
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 180; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      o: Math.random() * 0.6 + 0.1,
+      speed: Math.random() * 0.015 + 0.005,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    const o = s.o * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180,210,255,${o})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resizeCanvas();
+initStars();
+requestAnimationFrame(drawStars);
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+
+
+const pContainer = document.getElementById('particles');
+const colors = ['rgba(156,220,254,', 'rgba(199,146,234,', 'rgba(137,255,221,', 'rgba(242,210,143,'];
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 3 + 1;
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  p.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; background:${color}0.7)`;
+  const dur = Math.random() * 20 + 15;
+  const delay = Math.random() * 20;
+  p.style.animation = `floatUp ${dur}s ${delay}s linear infinite`;
+  pContainer.appendChild(p);
+}
+
+function showPage(id) {
+  document.getElementById('page-home').style.display = 'none';
+  document.querySelectorAll('.theme-page').forEach(p => p.classList.remove('visible'));
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+
+  if (id === 'home') {
+    document.getElementById('page-home').style.display = 'block';
+  } else {
+    const page = document.getElementById('page-' + id);
+    if (page) {
+      page.classList.add('visible');
+      const pill = Array.from(document.querySelectorAll('.nav-pill'))
+        .find(p => p.getAttribute('onclick') && p.getAttribute('onclick').includes("'" + id + "'"));
+      if (pill) pill.classList.add('active');
+    }
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  return false;
+}
+
+document.querySelectorAll('a[onclick]').forEach(a => {
+  a.addEventListener('click', e => e.preventDefault());
+});
+</script>
+</body>
+</html>
