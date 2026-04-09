@@ -19,7 +19,6 @@
     --soft-blue: #9cdcfe;
 }
 
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -33,7 +32,7 @@ body {
     overflow-x: hidden;
 }
 
-
+/* HEADER */
 .header {
     padding: 4rem 1.5rem 2rem;
     text-align: center;
@@ -60,7 +59,6 @@ body {
     animation: titleGlow 6s linear infinite;
 }
 
-
 .dialogue {
     max-width: 640px;
     margin: 0 auto;
@@ -71,14 +69,13 @@ body {
     box-shadow: 0 0 30px rgba(0,0,0,0.7);
     font-style: italic;
     line-height: 1.7;
-
     color: var(--soft-blue);
     text-shadow:
         0 0 6px var(--soft-blue),
         0 0 12px rgba(127,232,255,0.4);
 }
 
-
+/* BLUEPRINT CONTAINER */
 .blueprint-wrapper {
     display: flex;
     justify-content: center;
@@ -89,65 +86,15 @@ body {
     position: relative;
     width: min(900px, 100vw - 2rem);
     height: 60vh;
-    min-height: 420px;
+    min-height: 520px;
     border-radius: 20px;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.15);
     background: radial-gradient(circle at top, #0b101c 0%, #05070d 60%, #020308 100%);
     box-shadow: 0 0 40px rgba(0,0,0,0.9);
-    transform-origin: center;
-    transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.blueprint::before,
-.blueprint::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-.blueprint::before {
-    background-image:
-        linear-gradient(to right, rgba(78,201,255,0.18) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(78,201,255,0.18) 1px, transparent 1px);
-    background-size: 40px 40px;
-}
-
-.blueprint::after {
-    background-image:
-        linear-gradient(to right, rgba(43,154,203,0.18) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(43,154,203,0.18) 1px, transparent 1px);
-    background-size: 80px 80px;
-    mix-blend-mode: screen;
-}
-
-
-.compass-arc {
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    border: 1px solid rgba(127,232,255,0.0);
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) rotate(-40deg);
-    pointer-events: none;
-}
-
-.compass-arc::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border-top: 2px solid rgba(127,232,255,0.9);
-    border-left: 2px solid rgba(127,232,255,0.4);
-    border-right: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    opacity: 0;
-}
-
+/* CITY NODES */
 .city-node {
     position: absolute;
     width: 150px;
@@ -163,12 +110,10 @@ body {
     padding: 0.8rem;
     cursor: pointer;
     transition:
-        left 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
-        top 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
         box-shadow 0.3s ease,
         transform 0.3s ease,
         border-color 0.3s ease;
-    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: "IBM Plex Mono", monospace;
     font-size: 0.8rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -179,7 +124,6 @@ body {
     box-shadow: 0 0 24px rgba(127,232,255,0.9);
     border-color: var(--glow);
     transform: translateY(-4px);
-    animation: holoShift 3s linear infinite
 }
 
 .city-node.active {
@@ -188,27 +132,17 @@ body {
     color: var(--accent);
 }
 
-
+/* PANELS */
 .city-panel {
     max-width: 760px;
     margin: 0 auto 3rem;
     padding: 1.8rem 2.2rem;
     border-radius: 18px;
-    background: var(--panel-bg);
+    background: rgba(10,14,24,0.9);
     border: 1px solid rgba(255,255,255,0.16);
     box-shadow: 0 0 30px rgba(0,0,0,0.85);
     display: none;
     position: relative;
-    overflow: hidden;
-}
-
-.city-panel::before {
-    content: "";
-    position: absolute;
-    inset: -40%;
-    background: radial-gradient(circle at top left, rgba(127,232,255,0.12), transparent 60%);
-    opacity: 0.7;
-    pointer-events: none;
 }
 
 .city-panel h2 {
@@ -219,7 +153,7 @@ body {
 }
 
 .city-panel .tag {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-family: "IBM Plex Mono", monospace;
     font-size: 0.75rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -232,18 +166,6 @@ body {
     line-height: 1.8;
     opacity: 0.9;
 }
-.revision-mark {
-    color: var(--soft-red);
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.7rem;
-    opacity: 0.8;
-}
-.annotation {
-    color: var(--neon-green);
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-}
 
 footer {
     text-align: center;
@@ -251,19 +173,14 @@ footer {
     font-size: 0.85rem;
     opacity: 0.6;
 }
+
+/* TITLE GLOW */
 @keyframes titleGlow {
     0%   { filter: drop-shadow(0 0 6px var(--soft-blue)); }
     25%  { filter: drop-shadow(0 0 8px var(--violet)); }
     50%  { filter: drop-shadow(0 0 10px var(--neon-green)); }
     75%  { filter: drop-shadow(0 0 8px var(--violet)); }
     100% { filter: drop-shadow(0 0 6px var(--soft-blue)); }
-}
-
-@keyframes compassSweep {
-    0%   { opacity: 0; transform: translate(-50%, -50%) rotate(-40deg); }
-    10%  { opacity: 1; }
-    70%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(-50%, -50%) rotate(40deg); }
 }
 </style>
 </head>
@@ -274,58 +191,93 @@ footer {
     <h1>Invisible Cities</h1>
     <div class="dialogue">
         The city does not tell its past, but contains it like the lines of a hand.
-        
-        The city is redundant: it repeats itself so that
-something will stick in the mind.
+        The city is redundant: it repeats itself so that something will stick in the mind.
+    </div>
 </div>
 
 <div class="blueprint-wrapper">
     <div class="blueprint" id="blueprint">
-        <div class="compass-arc" id="compassArc"></div>
 
-        <div class="city-node" data-target="memory">Cities &amp; Memory</div>
-        <div class="city-node" data-target="desire">Cities &amp; Desire</div>
-        <div class="city-node" data-target="signs">Cities &amp; Signs</div>
-        <div class="city-node" data-target="thin">Thin Cities</div>
-        <div class="city-node" data-target="trading">Trading Cities</div>
+        <div class="city-node" data-target="memory" style="left: 5%; top: 12%;">Cities & Memory</div>
+<div class="city-node" data-target="desire" style="left: 28%; top: 5%;">Cities & Desire</div>
+<div class="city-node" data-target="signs" style="left: 55%; top: 5%;">Cities & Signs</div>
+<div class="city-node" data-target="eyes" style="left: 78%; top: 15%;">Cities & Eyes</div>
+
+<div class="city-node" data-target="thin" style="left: 5%; top: 38%;">Thin Cities</div>
+<div class="city-node" data-target="trading" style="left: 41%; top: 37%;">Trading Cities</div>
+<div class="city-node" data-target="names" style="left: 78%; top: 40%;">Cities & Names</div>
+
+<div class="city-node" data-target="sky" style="left: 5%; top: 62%;">Cities & the Sky</div>
+<div class="city-node" data-target="dead" style="left: 28%; top: 69%;">Cities & the Dead</div>
+<div class="city-node" data-target="hidden" style="left: 55%; top: 69%;">Hidden Cities</div>
+<div class="city-node" data-target="continuous" style="left: 78%; top: 62%;">Continuous Cities</div>
     </div>
 </div>
 
 <div class="city-panel" id="panel-memory">
     <div class="tag">Recollection</div>
-    <h2>Cities &amp; Memory</h2>
-    <p>
-“The city does not tell its past, but contains it like the lines of a hand.”
-    </p>       
-
+    <h2>Cities & Memory</h2>
+    <p>“The city does not tell its past, but contains it like the lines of a hand.”</p>
 </div>
 
 <div class="city-panel" id="panel-desire">
     <div class="tag">Longing</div>
-    <h2>Cities &amp; Desire</h2>
-    <p>
-    “The traveler recognizes the little that is his, discovering the much he has not had and will never have.”    </p>
+    <h2>Cities & Desire</h2>
+    <p>“The traveler recognizes the little that is his, discovering the much he has not had and will never have.”</p>
 </div>
 
 <div class="city-panel" id="panel-signs">
     <div class="tag">Code</div>
-    <h2>Cities &amp; Signs</h2>
-    <p>
-“You take delight not in a city’s seven or seventy wonders, but in the answer it gives to your question.”    </p>
+    <h2>Cities & Signs</h2>
+    <p>“You take delight not in a city’s seven or seventy wonders, but in the answer it gives to your question.”</p>
+</div>
+
+<div class="city-panel" id="panel-eyes">
+    <div class="tag">Perception</div>
+    <h2>Cities & Eyes</h2>
+    <p>“The city displays one face to the traveler.”</p>
+</div>
+
+<div class="city-panel" id="panel-names">
+    <div class="tag">Identity</div>
+    <h2>Cities & Names</h2>
+    <p>“The city’s name is a promise.”</p>
+</div>
+
+<div class="city-panel" id="panel-dead">
+    <div class="tag">Echo</div>
+    <h2>Cities & the Dead</h2>
+    <p>“The city of the dead is built of the living.”</p>
+</div>
+
+<div class="city-panel" id="panel-sky">
+    <div class="tag">Constellation</div>
+    <h2>Cities & the Sky</h2>
+    <p>“The sky governs the city’s fate.”</p>
 </div>
 
 <div class="city-panel" id="panel-thin">
     <div class="tag">Span</div>
     <h2>Thin Cities</h2>
-    <p>
-“The city rises on slender stilts, so that the ground can be used for other purposes.”    </p>
+    <p>“The city rises on slender stilts, so that the ground can be used for other purposes.”</p>
 </div>
 
 <div class="city-panel" id="panel-trading">
     <div class="tag">Flow</div>
     <h2>Trading Cities</h2>
-    <p>
-“The city is full of goods and stories that pass from hand to hand.”    </p>
+    <p>“The city is full of goods and stories that pass from hand to hand.”</p>
+</div>
+
+<div class="city-panel" id="panel-continuous">
+    <div class="tag">Expansion</div>
+    <h2>Continuous Cities</h2>
+    <p>“The city grows without end.”</p>
+</div>
+
+<div class="city-panel" id="panel-hidden">
+    <div class="tag">Veil</div>
+    <h2>Hidden Cities</h2>
+    <p>“The city hides within itself.”</p>
 </div>
 
 <footer>
@@ -333,31 +285,8 @@ something will stick in the mind.
 </footer>
 
 <script>
-const blueprint = document.getElementById('blueprint');
 const nodes = document.querySelectorAll('.city-node');
 const panels = document.querySelectorAll('.city-panel');
-const compassArc = document.getElementById('compassArc');
-
-let rotation = 0;
-
-
-function randomizeNodes() {
-    const rect = blueprint.getBoundingClientRect();
-    const padding = 60;
-    const cols = 4;
-    const rows = 3;
-
-    nodes.forEach((node, index) => {
-        const col = (index + Math.floor(Math.random() * cols)) % cols;
-        const row = (index + Math.floor(Math.random() * rows)) % rows;
-
-        const x = padding + col * ((rect.width - padding * 2) / (cols - 1));
-        const y = padding + row * ((rect.height - padding * 2) / (rows - 1));
-
-        node.style.left = x + "px";
-        node.style.top = y + "px";
-    });
-}
 
 function showCity(targetId) {
     panels.forEach(p => p.style.display = 'none');
@@ -369,30 +298,16 @@ function showCity(targetId) {
     const activeNode = Array.from(nodes).find(n => n.dataset.target === targetId);
     if (activeNode) activeNode.classList.add('active');
 
-
-    compassArc.style.animation = 'none';
-    void compassArc.offsetWidth;
-    compassArc.style.animation = 'compassSweep 1.2s ease-out';
-
-    randomizeNodes();
-
     window.scrollTo({
         top: panel.offsetTop - 40,
         behavior: 'smooth'
     });
 }
 
-
 nodes.forEach(node => {
     node.addEventListener('click', () => {
-        const target = node.dataset.target;
-        showCity(target);
+        showCity(node.dataset.target);
     });
-});
-
-
-window.addEventListener('load', () => {
-    randomizeNodes();
 });
 </script>
 
