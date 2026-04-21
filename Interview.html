@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Day in the Life of a UN Peacekeeper — Interview with Dylan Rhee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --olive: #3d4a2e;
+      --olive-light: #5a6b42;
+      --sand: #d4c9a8;
+      --sand-light: #f0ebe0;
+      --sand-pale: #f7f4ed;
+      --charcoal: #2c2c2c;
+      --white: #ffffff;
+      --accent: #b08d57;
+      --accent-dark: #8a6d3b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--charcoal);
+      background: var(--sand-pale);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(61, 74, 46, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+      border-bottom: 2px solid var(--accent);
+    }
+    nav .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--sand); letter-spacing: 1px;
+    }
+    nav ul { list-style: none; display: flex; gap: 1.8rem; }
+    nav a {
+      color: var(--sand-light); text-decoration: none; font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      background: var(--olive);
+      color: var(--sand-light);
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.3;
+      filter: grayscale(30%);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--sand-pale));
+      z-index: 2;
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.4rem 1.2rem;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      border-radius: 2px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 600px;
+      opacity: 0.85;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+    .hero-meta {
+      display: flex; gap: 2.5rem; flex-wrap: wrap; justify-content: center;
+      font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 140px;
+      animation: bounce 2s infinite;
+      color: var(--accent); font-size: 1.5rem;
+      z-index: 3;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--olive-light);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.3rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--olive);
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+    }
+
+    /* ─── PHOTO COMPONENTS ─── */
+    .photo-banner {
+      width: 100%;
+      max-width: 900px;
+      margin: 2rem auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .photo-banner img {
+      width: 100%; height: auto;
+      display: block;
+    }
+    .photo-banner .caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: var(--sand-light);
+      padding: 2rem 1.5rem 1rem;
+      font-size: 0.85rem;
+      font-style: italic;
+      letter-spacing: 0.3px;
+    }
+
+    .photo-inline {
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+    .photo-inline img {
+      width: 100%; height: auto; display: block;
+    }
+    .photo-inline .caption {
+      background: var(--charcoal);
+      color: var(--sand);
+      padding: 0.75rem 1.2rem;
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      max-width: 900px;
+      margin: 2.5rem auto;
+    }
+    .photo-grid .photo-inline { margin: 0; }
+
+    /* ─── TIMELINE (main feature) ─── */
+    .timeline-section {
+      background: var(--olive);
+      color: var(--sand-light);
+      padding: 6rem 2rem;
+      position: relative;
+    }
+    .timeline-section .section-label { color: var(--accent); border-color: var(--accent); }
+    .timeline-section .section-title { color: var(--sand); }
+    .timeline-section .section-intro {
+      color: var(--sand); opacity: 0.8; max-width: 650px;
+      margin-bottom: 3.5rem; font-size: 1.05rem;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 1rem 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent), var(--olive-light), var(--accent));
+      border-radius: 3px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 75px;
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: fadeSlideIn 0.5s forwards;
+    }
+    .timeline-item:nth-child(1)  { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2)  { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3)  { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4)  { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5)  { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6)  { animation-delay: 0.6s; }
+    .timeline-item:nth-child(7)  { animation-delay: 0.7s; }
+    .timeline-item:nth-child(8)  { animation-delay: 0.8s; }
+    .timeline-item:nth-child(9)  { animation-delay: 0.9s; }
+    .timeline-item:nth-child(10) { animation-delay: 1.0s; }
+    .timeline-item:nth-child(11) { animation-delay: 1.1s; }
+    .timeline-item:nth-child(12) { animation-delay: 1.15s; }
+    .timeline-item:nth-child(13) { animation-delay: 1.2s; }
+    .timeline-item:nth-child(14) { animation-delay: 1.25s; }
+    .timeline-item:nth-child(15) { animation-delay: 1.3s; }
+
+    @keyframes fadeSlideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 18px;
+      top: 6px;
+      width: 22px; height: 22px;
+      background: var(--accent);
+      border: 3px solid var(--olive);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(176,141,87,0.25);
+      z-index: 2;
+    }
+    .timeline-item:hover .timeline-dot {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 8px rgba(176,141,87,0.3);
+      transition: all 0.3s;
+    }
+
+    .timeline-time {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--sand);
+      margin-bottom: 0.3rem;
+    }
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: var(--sand);
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    .timeline-icon {
+      display: inline-block;
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .timeline-photo {
+      margin-top: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      max-width: 500px;
+    }
+    .timeline-photo img {
+      width: 100%; height: auto; display: block;
+    }
+    .timeline-photo .caption {
+      background: rgba(0,0,0,0.5);
+      color: var(--sand);
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-style: italic;
+    }
+
+    /* ─── INTERVIEW Q&A ─── */
+    .qa-section { background: var(--sand-pale); }
+
+    .qa-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--accent);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .qa-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .qa-question {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--olive);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+    .qa-answer {
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.85;
+    }
+    .qa-answer em {
+      color: var(--olive-light);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* ─── STORY CARD ─── */
+    .story-section {
+      background: var(--sand-light);
+      padding: 5rem 2rem;
+    }
+    .story-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+      position: relative;
+    }
+    .story-card::before {
+      content: '\201C';
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      color: var(--accent);
+      opacity: 0.3;
+      position: absolute;
+      top: 10px; left: 20px;
+      line-height: 1;
+    }
+    .story-card p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #444;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--charcoal);
+      color: var(--sand);
+      text-align: center;
+      padding: 3rem 2rem;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .hero-meta { flex-direction: column; gap: 0.8rem; }
+      .qa-card { padding: 1.5rem; }
+      .story-card { padding: 2rem 1.5rem; }
+      .timeline-item { padding-left: 65px; }
+      .photo-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─── -->
+<nav>
+  <div class="logo">UNMISS &bull; South Sudan</div>
+  <ul>
+    <li><a href="#timeline">Daily Life</a></li>
+    <li><a href="#interview">Interview</a></li>
+    <li><a href="#stories">Stories</a></li>
+    <li><a href="#reflections">Reflections</a></li>
+  </ul>
+</nav>
+
+
+<section class="hero">
+ 
+  <div class="hero-bg">
+    <img src="dylan-on-base.jpg" alt="Dylan Rhee sitting on a UN Land Cruiser at the base in Pibor, South Sudan" />
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">An Interview Feature</div>
+    <h1>A Day in the Life of a <span>UN Peacekeeper</span></h1>
+    <p>An intimate look at daily life on a UN peacekeeping base in South Sudan, through the eyes of civil affairs specialist Dylan Rhee of the Korean contingent.</p>
+    <div class="hero-meta">
+      <span>UNMISS &mdash; Pibor, South Sudan</span>
+      <span>Korean Contingent</span>
+      <span>Civil Affairs Specialist</span>
+    </div>
+  </div>
+  <div class="scroll-hint">&#8595;</div>
+</section>
+
+
+<section class="timeline-section" id="timeline">
+  <div class="container">
+    <span class="section-label">Main Feature</span>
+    <h2 class="section-title">A Day in the Life: <br/>From Dawn to Midnight on Base</h2>
+    <p class="section-intro">
+      Every day on a UN peacekeeping base follows a rhythm &mdash; a mix of routine, purpose, camaraderie, and quiet moments. Here's what a typical day looked like for Dylan in Pibor, South Sudan.
+    </p>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#9788;</span> 6:30 AM</div>
+        <div class="timeline-title">Wake Up &amp; Breakfast</div>
+        <div class="timeline-desc">Start the day with cereal or eggs cooked on your own. Nothing fancy &mdash; just fuel for the day ahead.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time">7:00 AM</div>
+        <div class="timeline-title">Shower &amp; Dress</div>
+        <div class="timeline-desc">Get cleaned up and into uniform. Preparation for the workday begins.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#9998;</span> 8:00 AM</div>
+        <div class="timeline-title">Office &amp; Team Meeting</div>
+        <div class="timeline-desc">Head to the office, check emails, and join the daily team meeting with the civil affairs team and the eight Korean military engineers. Review the run-down for the day.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#9872;</span> 10:00 AM</div>
+        <div class="timeline-title">Off-Base: Civil Affairs Work</div>
+        <div class="timeline-desc">Leave the base with the civil affairs team to meet with the local mayor and discuss ongoing projects, like the construction of a dam for the community.</div>
+       
+        <div class="timeline-photo">
+          <img src="un-truck-crew.jpg" alt="Korean peacekeepers working atop a UN shipping container truck in Pibor" />
+          <div class="caption">Korean peacekeepers loading equipment for the day's off-base operations</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time">11:30 AM</div>
+        <div class="timeline-title">Town Market &amp; Lunch</div>
+        <div class="timeline-desc">Visit the town market, grab lunch, and chat with locals &mdash; building the relationships that make peacekeeping work.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time">12:00 PM</div>
+        <div class="timeline-title">Return to Base &amp; Break</div>
+        <div class="timeline-desc">Head back to base for a midday break. Rest up before the physical work of the afternoon.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#9874;</span> 1:30 PM</div>
+        <div class="timeline-title">Construction &amp; Heavy Equipment</div>
+        <div class="timeline-desc">Bring out the excavators, bulldozers, and dump trucks to a quarry near the dam site. Dig up materials and haul them for the construction project.</div>
+      
+        <div class="timeline-photo">
+          <img src="quarry-site.jpg" alt="Korean soldier overlooking quarry site with excavators and UN armored vehicles" />
+          <div class="caption">Overseeing excavation at the quarry near the dam construction site</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time">5:00 PM</div>
+        <div class="timeline-title">Clock Out</div>
+        <div class="timeline-desc">Wrap up the day's work and return to base. The heavy lifting is done.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#127860;</span> 6:00 PM</div>
+        <div class="timeline-title">Dinner with the Contingent</div>
+        <div class="timeline-desc">Eat with the Korean team &mdash; rice, soup, and meat. Sometimes the Indian infantry, who make up the majority of the base, would invite everyone over for a shared meal.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#127947;</span> 8:00 PM</div>
+        <div class="timeline-title">Gym &amp; Workout</div>
+        <div class="timeline-desc">Hit the base gym. Staying fit is both a requirement and a way to decompress after a long day in the field.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time">10:00 PM</div>
+        <div class="timeline-title">Late-Night Snack</div>
+        <div class="timeline-desc">Head to the kitchen for a serious post-workout refuel &mdash; eight eggs and ten pieces of bacon. You earn your calories out here.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-time"><span class="timeline-icon">&#9790;</span> 12:00 AM</div>
+        <div class="timeline-title">Lights Out</div>
+        <div class="timeline-desc">Bedtime. Rest up and do it all again tomorrow.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── INTERVIEW Q&A ─── -->
+<section class="qa-section" id="interview">
+  <div class="container">
+    <span class="section-label">The Interview</span>
+    <h2 class="section-title">Getting to Know Dylan Rhee</h2>
+
+    <div class="qa-card">
+      <div class="qa-question">Q: What was your role in South Sudan, and what did the job involve day to day?</div>
+      <div class="qa-answer">
+        I was part of the Korean contingent of UNMISS &mdash; the United Nations Mission in South Sudan. I served as a <em>civil affairs specialist</em>, deployed in the town of Pibor and attached to a small team of military engineers. My primary job was to act as a liaison between the military side and the civilian branches of the UN. On a practical level, that meant organizing the escort of civilians under infantry protection and serving as the communicator for infantry soldiers during those operations.
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-question">Q: Were you ever in danger? Did you experience combat firsthand?</div>
+      <div class="qa-answer">
+        There were plenty of mortars and bullets landing nearby. It's the kind of thing that shocks you at first, but honestly, you get used to it. It becomes part of the background of daily life out there.
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-question">Q: What motivated you to volunteer for a peacekeeping mission in South Sudan?</div>
+      <div class="qa-answer">
+        It looked fun &mdash; it seemed like a real adventure. I thought to myself, <em>when else would I ever visit South Sudan?</em> The training alone was fascinating. I received interpreter training and UN peacekeeping coursework covering international law, how to interact with local populations, and even learned a couple of phrases in Dinka, the local language. I had to carry a handbook with key phrases like "Stop moving or we will shoot" and "Leave the area now." It was intense, but that's what drew me in.
+      </div>
+    </div>
+
+    <!-- Photo 4: UNMISS armored convoy -->
+    <div class="photo-banner">
+      <img src="armored-convoy.jpg" alt="UNMISS armored vehicles on patrol along the road in South Sudan" />
+      <div class="caption">UNMISS armored vehicles on patrol &mdash; the only road connecting the two cities</div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-question">Q: How has this experience changed the way you see the world?</div>
+      <div class="qa-answer">
+        My worldview has completely opened up. I got to see a part of the world and meet people I never could have possibly encountered otherwise. These were experiences that were only possible through military service. For example, the civil affairs officer I worked with was a guy from Sierra Leone who had done his master's degree in Kenya. We'd talk for hours about his real estate business back home. The patrols further out of town with the Indian infantry were fascinating too &mdash; locals would follow us around, and I ended up making friends with the children in the villages. I actually got in trouble once for giving them food, because the policy was to prevent reliance on us. I was just handing out bags of chocolates.
+      </div>
+    </div>
+
+    <!-- Photo 5: Dylan with local friend -->
+    <div class="photo-banner">
+      <img src="dylan-wth-local.jpg" alt="Dylan Rhee posing with a local friend at the base in Pibor" />
+      <div class="caption">Building friendships &mdash; Dylan with a local friend at the UN base in Pibor</div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-question">Q: What are your plans now that you're transitioning back to civilian life?</div>
+      <div class="qa-answer">
+        It's going to take a minute to switch gears from military to civilian life. My plan is to attend summer school, travel a lot, and just gradually get used to being a regular member of society again. It's a bigger adjustment than people might think.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FIELD STORY ─── -->
+<section class="story-section" id="stories">
+  <div class="container">
+    <span class="section-label">From the Field</span>
+    <h2 class="section-title">The Drainage Pipe Incident</h2>
+    <div class="story-card">
+      <p>
+        One day, a local man stole a drainage pipe from a project site because it was made of metal he could sell. He ended up selling it, and the pipe was eventually found broken down at someone else's house. We had to wait a month and a half for a replacement, and in the meantime, the roads were completely unusable. To make matters worse, the supply truck carrying the new pipe got raided on its way to us &mdash; along with a shipment of food. They robbed the car and took everything. That kind of thing happens all the time out there because there's only one major road connecting the two cities. The replacement truck eventually arrived completely empty.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── REFLECTIONS ─── -->
+<section class="qa-section" id="reflections" style="background: var(--sand-light); padding-bottom: 6rem;">
+  <div class="container" style="text-align: center; max-width: 700px;">
+    <span class="section-label">Looking Back</span>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Final Reflections</h2>
+    <p style="font-size: 1.15rem; line-height: 2; color: #555; font-style: italic;">
+      "My worldview has completely opened up. I got to see parts of the world and meet people I never could have possibly encountered otherwise. These were experiences that were only possible through serving."
+    </p>
+    <p style="margin-top: 1.5rem; font-weight: 600; color: var(--olive);">&mdash; Dylan Rhee, Civil Affairs Specialist, UNMISS</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>Interview with Dylan Rhee &bull; Korean Contingent, UNMISS &bull; Pibor, South Sudan</p>
+  <p style="margin-top: 0.5rem; opacity: 0.5;">Interview conducted and produced by Jaden</p>
+</footer>
+
+<!-- Scroll-triggered animation -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    item.style.animationPlayState = 'paused';
+    observer.observe(item);
+  });
+
+  // Smooth nav background on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 100) {
+      nav.style.background = 'rgba(44, 44, 44, 0.98)';
+    } else {
+      nav.style.background = 'rgba(61, 74, 46, 0.95)';
+    }
+  });
+</script>
+
+</body>
+</html>

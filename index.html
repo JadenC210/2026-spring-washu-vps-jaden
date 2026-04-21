@@ -70,7 +70,7 @@ body > {
     <ul>
         <li><a href="profile-card.html">Profile Card</a></li>
         <li><a href="collection-of-things">Collection of Things</a></li> 
-        <li><a href="Writing/index.html">Writing</a></li> 
+        <li><a href="Writing/">Writing</a></li> 
 
     </ul>
     <h2>Readings</h2>
@@ -92,4 +92,31 @@ body > {
     </ul>
     </body>
 </body>
+<style>
+a {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 0;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+a::before {
+    content: '→';
+    font-size: 0.85rem;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    color: #ffb347;
+}
+
+a:hover {
+    color: #ffb347;
+    padding-left: 18px;
+}
+
+a:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+</style>
 </html>
